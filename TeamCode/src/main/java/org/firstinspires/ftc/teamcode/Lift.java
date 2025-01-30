@@ -12,29 +12,44 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 @Config
 public class Lift {
-    public Servo grabServo, liftServo;
+    public Servo grabServo, liftServo, rotationServo, rotationrotationServo;
     public DcMotorEx leftLiftMotor, rightLiftMotor;
-    private int maxheight = 1490;
+    public static double rotmaxpos = 0.78;
+    public static double rotmidpos = 0.42;
+    public double currentRotPos = rotmidpos;
+    public static double rotminpos = 0.075;
+    public static double rotrotStartingpos = 0.1;
+    public static double rotrotAimingpos = 0.807;
+    public static double rotrotFishingpos = 0.47;
+    public static double rotrotScoringingpos = 0.42;
+
+    private int maxheight = 1200;
     public  double normalOperationValue = 0.2, currentOperationValue = 0.2;
     private double highLoadOperationValue = 1;
-    private double grabPressTime, liftPressTime, amplifierPressTime = 0;
-    public static double grabServoClosedPos = 1;
-    public static double        grabServoOpenedPos = 0.85;
-    public static double        liftServoClosedPos = 0.45;
-    public static double        liftServoOpenedPos = 0.135;
+    private double grabPressTime, liftPressTime, amplifierPressTime, rotTimer, sequenceTimer = 0;
+    public static double grabServoClosedPos = 0.85;
+    public static double        grabServoOpenedPos = 0.62;
+    public static double        liftServoClosedPos = 0.66;
+    public static double        liftServoOpenedPos = 0.21;
     private int lastLeftPos, lastRightPos = 0;
-    private boolean isStopped = false;
+    private int currentSequence = -1;
+    private boolean isStopped, isSequenceRunning = false;
     private boolean isGrabClosed, isLiftClosed = true;
     private ElapsedTime timer = new ElapsedTime();
 
     public void init(HardwareMap hard){
         grabServo = hard.get(Servo.class, "grabServo");
         liftServo = hard.get(Servo.class, "liftServo");
+        rotationServo = hard.get(Servo.class, "rotationServo");
+        rotationrotationServo = hard.get(Servo.class, "rotationrotationServo");
 
-        grabServo.setPosition(grabServoClosedPos);
-        liftServo.setPosition(0.55);
 
         grabServo.setDirection(Servo.Direction.FORWARD);
+        liftServo.setDirection(Servo.Direction.REVERSE);
+
+        InitSeq();
+
+
         leftLiftMotor = (DcMotorEx) hard.dcMotor.get("leftLiftMotor");
         rightLiftMotor = (DcMotorEx) hard.dcMotor.get("rightLiftMotor");
         rightLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -49,6 +64,128 @@ public class Lift {
 
 
 
+    }
+    public void LiftGoTo(int ticks){
+        lastLeftPos = ticks;
+        lastRightPos = ticks;
+
+        currentOperationValue = 0.6;
+    }
+
+    public void SequenceSwitch(Gamepad g2){
+        if (g2.left_stick_button) {
+            sequenceTimer = timer.milliseconds();
+
+            currentSequence = 1;
+        } else if (g2.x) {
+            sequenceTimer = timer.milliseconds();
+
+            currentSequence = 2;
+
+        } else if (g2.dpad_right) {
+            sequenceTimer = timer.milliseconds();
+
+            currentSequence = 3;
+
+        }
+
+
+    }
+    public void InitSeq(){
+        if (currentSequence==-1) {
+
+            rotationServo.setPosition(rotmidpos);
+            grabServo.setPosition(grabServoClosedPos);
+            liftServo.setPosition(liftServoClosedPos);
+
+
+            while (timer.milliseconds() - sequenceTimer < 800) {
+
+            }
+            rotationrotationServo.setPosition(rotrotStartingpos);
+            currentSequence = 4;
+
+        }
+
+    }
+    public void RollOutSeq(){
+        if (currentSequence==4) {
+
+            sequenceTimer = timer.milliseconds();
+            rotationrotationServo.setPosition(rotrotFishingpos);
+
+            if (timer.milliseconds() - sequenceTimer >= 500) {
+                rotationServo.setPosition(rotmidpos);
+                currentSequence = 0;
+            }
+
+        }
+
+    }
+
+    public void AimingSeq(){
+        if (currentSequence == 1){
+
+            rotationrotationServo.setPosition(rotrotAimingpos);
+
+            liftServo.setPosition(liftServoOpenedPos);
+            if (timer.milliseconds() - sequenceTimer >= 500) {
+                currentSequence = 0;
+            }
+
+
+        }
+    }
+    public void FishingSeq(){
+        if (currentSequence == 2){
+
+            LiftGoTo(50);
+
+            rotationrotationServo.setPosition(rotrotFishingpos);
+
+            liftServo.setPosition(liftServoOpenedPos);
+            if (timer.milliseconds() - sequenceTimer >= 500) {
+                currentSequence = 0;
+                currentOperationValue = normalOperationValue;
+            }
+
+
+        }
+    }
+    public void ScoringSeq(){
+        if (currentSequence == 3){
+
+            LiftGoTo(750);
+            if (timer.milliseconds() - sequenceTimer >= 500) {
+                rotationrotationServo.setPosition(rotrotScoringingpos);
+
+                liftServo.setPosition(liftServoClosedPos);
+
+                currentOperationValue = normalOperationValue;
+
+                currentSequence = 0;
+            }
+
+
+        }
+    }
+
+
+    public void Fishing(Gamepad g2) {
+        if(g2.left_bumper & timer.milliseconds() - rotTimer >= 0.0001){
+            if (currentRotPos<rotmaxpos){currentRotPos += 0.02;}
+            rotTimer = timer.milliseconds();
+
+        } else if(g2.right_bumper & timer.milliseconds() - rotTimer >= 0.0001){
+            if (currentRotPos>rotminpos){currentRotPos -= 0.02;}
+            rotTimer = timer.milliseconds();
+
+        } else if (g2.right_stick_button) {
+            currentRotPos=rotmidpos;
+
+
+        }
+        rotationServo.setPosition(currentRotPos);
     }
     public void StickMover(Gamepad g2){
         if (g2.b & timer.milliseconds()-liftPressTime>250 & isLiftClosed){

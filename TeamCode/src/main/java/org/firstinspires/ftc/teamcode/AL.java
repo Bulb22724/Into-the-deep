@@ -43,7 +43,7 @@ public class AL extends LinearOpMode {
         waitForStart();
         // единожды исполняемые действия после старта
         if (opModeIsActive()) { // единожды исполняемые действия после старта
-            
+
             LT.leftLiftMotor.setTargetPosition(ELEV);
             LT.rightLiftMotor.setTargetPosition(ELEV);
 
