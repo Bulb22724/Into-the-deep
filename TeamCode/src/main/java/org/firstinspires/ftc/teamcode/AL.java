@@ -19,11 +19,20 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class AL extends LinearOpMode {
     //
     private ElapsedTime timer = new ElapsedTime();
-    public static double FD1= 1800;
+
+    public static double FD1= 1850;
     public static double R1= 1200;
-    public static int ELEV= 750;
-    public static double FD2= 500;
-    public static int DECL= 200;
+    public static int ELEV= 950;
+    public static double FD2= 1500;
+    public static int DECL= 300;
+    public static double RIGHT = 600;
+    public static double FD3 = 600;
+    public static double RIGHT2 = 600;
+    public static double BACK = 600;
+    public static double FD4 = 600;
+    public static double RIGHT3 = 600;
+    public static double BACK2 = BACK;
+
 
 
 
@@ -43,41 +52,40 @@ public class AL extends LinearOpMode {
         waitForStart();
         // единожды исполняемые действия после старта
         if (opModeIsActive()) { // единожды исполняемые действия после старта
+        LT.LiftGoToAUTO(ELEV);
 
-            LT.leftLiftMotor.setTargetPosition(ELEV);
-            LT.rightLiftMotor.setTargetPosition(ELEV);
-
-            LT.leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            LT.rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            LT.leftLiftMotor.setPower(0.2);
-            LT.rightLiftMotor.setPower(0.2);
-
-        LT.liftServo.setPosition(0.45);
-        MDT.Forward(900, FD1);
-        MDT.Right(900, R1);
+        LT.rotationrotationServo.setPosition(0.42);
+        sleep(500);
+        LT.rotationServo.setPosition(0.42);
+        MDT.Forward(500, 0, 0, FD1);
 
 
         CT = timer.milliseconds();
 
         sleep(2500);
-        MDT.Forward(900,FD2);
 
-        LT.leftLiftMotor.setTargetPosition(DECL);
-        LT.rightLiftMotor.setTargetPosition(DECL);
+        LT.LiftGoToAUTO(DECL);
 
         sleep(2500);
 
-        LT.grabServo.setPosition(0.85);
+        LT.grabServo.setPosition(0.62);
 
         sleep(2500);
 
-        MDT.Back(900, FD2);
+        MDT.Forward(-500, 500, 0, 1850);
+            MDT.Forward(0, 500, 0, 1000);
 
-        LT.leftLiftMotor.setTargetPosition(-5);
-        LT.rightLiftMotor.setTargetPosition(-5);
+        LT.LiftGoToAUTO(-5);
 
-        sleep(5000);
+        sleep(2000);
+
+        //MDT.Right(500, RIGHT);
+        //MDT.Forward(500, FD3);
+        //MDT.Right(500, RIGHT2);
+        //MDT.Back(500, BACK);
+        //MDT.Forward(500,FD4);
+        //MDT.Right(500,RIGHT3);
+        //MDT.Back(500, BACK2);
 
 
 

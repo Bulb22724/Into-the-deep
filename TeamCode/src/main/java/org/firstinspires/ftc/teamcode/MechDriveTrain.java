@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 public class MechDriveTrain {
 
     public DcMotorEx frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
-    private double mmPerTick = 0.401;
-    private IMU imu;
+    private double mmPerTick = 0.802;
+    public IMU imu;
     private ElapsedTime timer = new ElapsedTime();
     private double CT = 0;
     public void init(HardwareMap hard){
@@ -29,10 +29,10 @@ public class MechDriveTrain {
         frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // Reverse the right side motors. This may be wrong for your setup.
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
@@ -51,20 +51,22 @@ public class MechDriveTrain {
         imu = hard.get(IMU.class, "imu");
         // Adjust the orientation parameters to match your robot
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                RevHubOrientationOnRobot.UsbFacingDirection.DOWN));
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP));
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
-
+        imu.resetYaw();
 
     }
     public void OpMode(Gamepad g1){
         double y = -g1.left_stick_y;
-        double x = g1.left_stick_x * 1.1;
+        double x = g1.left_stick_x;
         double rx = -g1.right_stick_x;
         if (g1.y) {
             imu.resetYaw();
         }
+
+
 
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
@@ -83,21 +85,31 @@ public class MechDriveTrain {
         double frontRightPower = (rotY - rotX - rx) / denominator;
         double backRightPower = (rotY + rotX - rx) / denominator;
 
-
-        frontLeftMotor.setPower(frontLeftPower*0.75);
-        backLeftMotor.setPower(backLeftPower*0.75);
-        frontRightMotor.setPower(frontRightPower*0.75);
-        backRightMotor.setPower(backRightPower*0.75);
+        frontLeftMotor.setPower(frontLeftPower*0.65);
+        backLeftMotor.setPower(backLeftPower*0.65);
+        frontRightMotor.setPower(frontRightPower*0.65);
+        backRightMotor.setPower(backRightPower*0.65);
     }
 
-    public void Forward(double speed, double time){
+    public void Forward(double speedX, double speedY, double speedRot, double time){
         CT = timer.milliseconds();
-        while (timer.milliseconds()-CT<time){
 
-            frontLeftMotor.setVelocity(speed);
-            frontRightMotor.setVelocity(speed);
-            backLeftMotor.setVelocity(speed);
-            backRightMotor.setVelocity(speed);
+
+        while (timer.milliseconds()-CT<time){
+            double frontLeftPower = speedX + speedY + speedRot;
+            double backLeftPower = speedX - speedY + speedRot;
+            double frontRightPower = speedX - speedY - speedRot;
+            double backRightPower = speedX + speedY - speedRot;
+
+            frontLeftMotor.setVelocity(frontLeftPower);
+            backLeftMotor.setVelocity(backLeftPower);
+            frontRightMotor.setVelocity(frontRightPower);
+            backRightMotor.setVelocity(backRightPower);
+
+//            frontLeftMotor.setVelocity(speed);
+//            frontRightMotor.setVelocity(speed);
+//            backLeftMotor.setVelocity(speed);
+//            backRightMotor.setVelocity(speed);
 
         }
         frontLeftMotor.setVelocity(0);

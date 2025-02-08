@@ -10,7 +10,7 @@ public class MeasuringTool1 extends LinearOpMode {
     private double CT = 0.0;
     private int lastKey = 0;
     private double FDTime, LTTime, RTTime, BKTime = 0.0;
-    private double velocity = 900;
+    private double velocity = 500;
     private ElapsedTime timer = new ElapsedTime();
     @Override
     public void runOpMode() throws InterruptedException {

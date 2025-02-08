@@ -30,7 +30,7 @@ public class Lift {
     public static double grabServoClosedPos = 0.85;
     public static double        grabServoOpenedPos = 0.62;
     public static double        liftServoClosedPos = 0.66;
-    public static double        liftServoOpenedPos = 0.21;
+    public static double        liftServoOpenedPos = 0.18;
     private int lastLeftPos, lastRightPos = 0;
     private int currentSequence = -1;
     private boolean isStopped, isSequenceRunning = false;
@@ -65,7 +65,17 @@ public class Lift {
 
 
     }
-    public void LiftGoTo(int ticks){
+    public void LiftGoToAUTO(int ticks){
+        leftLiftMotor.setTargetPosition(ticks);
+        rightLiftMotor.setTargetPosition(ticks);
+
+        leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftLiftMotor.setPower(0.4);
+        rightLiftMotor.setPower(0.4);
+    }
+    public void LiftGoToOP(int ticks){
         lastLeftPos = ticks;
         lastRightPos = ticks;
 
@@ -82,7 +92,7 @@ public class Lift {
 
             currentSequence = 2;
 
-        } else if (g2.dpad_right) {
+        } else if (g2.right_stick_button) {
             sequenceTimer = timer.milliseconds();
 
             currentSequence = 3;
@@ -128,6 +138,8 @@ public class Lift {
 
             rotationrotationServo.setPosition(rotrotAimingpos);
 
+            LiftGoToOP(330);
+
             liftServo.setPosition(liftServoOpenedPos);
             if (timer.milliseconds() - sequenceTimer >= 500) {
                 currentSequence = 0;
@@ -139,7 +151,7 @@ public class Lift {
     public void FishingSeq(){
         if (currentSequence == 2){
 
-            LiftGoTo(50);
+            LiftGoToOP(50);
 
             rotationrotationServo.setPosition(rotrotFishingpos);
 
@@ -155,7 +167,7 @@ public class Lift {
     public void ScoringSeq(){
         if (currentSequence == 3){
 
-            LiftGoTo(750);
+            LiftGoToOP(850);
             if (timer.milliseconds() - sequenceTimer >= 500) {
                 rotationrotationServo.setPosition(rotrotScoringingpos);
 
