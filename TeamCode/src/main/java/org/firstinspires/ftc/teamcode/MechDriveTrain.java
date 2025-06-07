@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -17,31 +18,29 @@ public class MechDriveTrain {
     public IMU imu;
     private ElapsedTime timer = new ElapsedTime();
     private double CT = 0;
-    public void init(HardwareMap hard){
 
+    public void init(HardwareMap hard) {
+        //указываем моторы
         frontLeftMotor = (DcMotorEx) hard.dcMotor.get("frontLeftMotor");
         backLeftMotor = (DcMotorEx) hard.dcMotor.get("backLeftMotor");
         frontRightMotor = (DcMotorEx) hard.dcMotor.get("frontRightMotor");
         backRightMotor = (DcMotorEx) hard.dcMotor.get("backRightMotor");
-
+        //назначаем движение моторов с помощью энкодеров обнуляя в конце перемещения их значения
         frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        //назначаем движение моторов с помощью энкодеров
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // Reverse the right side motors. This may be wrong for your setup.
-        // If your robot moves backwards when commanded to go forwards,
-        // reverse the left side instead.
-        // See the note about this earlier on this page.
+        //задаем движение моторов
         frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        //задаем ееее
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -58,14 +57,14 @@ public class MechDriveTrain {
         imu.resetYaw();
 
     }
-    public void OpMode(Gamepad g1){
+
+    public void OpMode(Gamepad g1) {
         double y = -g1.left_stick_y;
         double x = g1.left_stick_x;
         double rx = -g1.right_stick_x;
         if (g1.y) {
             imu.resetYaw();
         }
-
 
 
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
@@ -85,17 +84,17 @@ public class MechDriveTrain {
         double frontRightPower = (rotY - rotX - rx) / denominator;
         double backRightPower = (rotY + rotX - rx) / denominator;
 
-        frontLeftMotor.setPower(frontLeftPower*0.65);
-        backLeftMotor.setPower(backLeftPower*0.65);
-        frontRightMotor.setPower(frontRightPower*0.65);
-        backRightMotor.setPower(backRightPower*0.65);
+        frontLeftMotor.setPower(frontLeftPower * 0.65);
+        backLeftMotor.setPower(backLeftPower * 0.65);
+        frontRightMotor.setPower(frontRightPower * 0.65);
+        backRightMotor.setPower(backRightPower * 0.65);
     }
 
-    public void Forward(double speedX, double speedY, double speedRot, double time){
+    public void Forward(double speedX, double speedY, double speedRot, double time) {
         CT = timer.milliseconds();
 
 
-        while (timer.milliseconds()-CT<time){
+        while (timer.milliseconds() - CT < time) {
             double frontLeftPower = speedX + speedY + speedRot;
             double backLeftPower = speedX - speedY + speedRot;
             double frontRightPower = speedX - speedY - speedRot;
@@ -118,9 +117,10 @@ public class MechDriveTrain {
         backRightMotor.setVelocity(0);
 
     }
-    public void Back(double speed, double time){
+
+    public void Back(double speed, double time) {
         CT = timer.milliseconds();
-        while (timer.milliseconds()-CT<time){
+        while (timer.milliseconds() - CT < time) {
 
             frontLeftMotor.setVelocity(-speed);
             frontRightMotor.setVelocity(-speed);
@@ -134,9 +134,10 @@ public class MechDriveTrain {
         backRightMotor.setVelocity(0);
 
     }
-    public void Right(double speed, double time){
+
+    public void Right(double speed, double time) {
         CT = timer.milliseconds();
-        while (timer.milliseconds()-CT<time){
+        while (timer.milliseconds() - CT < time) {
 
             frontLeftMotor.setVelocity(speed);
             frontRightMotor.setVelocity(-speed);
@@ -150,9 +151,10 @@ public class MechDriveTrain {
         backRightMotor.setVelocity(0);
 
     }
-    public void Left(double speed, double time){
+
+    public void Left(double speed, double time) {
         CT = timer.milliseconds();
-        while (timer.milliseconds()-CT<time){
+        while (timer.milliseconds() - CT < time) {
 
             frontLeftMotor.setVelocity(-speed);
             frontRightMotor.setVelocity(speed);
