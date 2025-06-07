@@ -14,46 +14,68 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Lift {
     public Servo grabServo, liftServo, rotationServo, rotationrotationServo;
     public DcMotorEx leftLiftMotor, rightLiftMotor;
+    //максимальная позиция поворота захвата
     public static double rotmaxpos = 0.78;
+    //средняя позиция поворота захвата
     public static double rotmidpos = 0.42;
+    //Переменная для указания текущей позиции (по умолчанию в ней указана позиция поворота в которой робот стартует)
     public double currentRotPos = rotmidpos;
+    //минимальная позиция поворота захвата
     public static double rotminpos = 0.075;
+    //начальная позиция поворота захвата
     public static double rotrotStartingpos = 0.1;
+    //позиция поворота для сбора проб со стенки
     public static double rotrotAimingpos = 0.807;
+    //позиция поворота для подвеса проб на перекладину
     public static double rotrotFishingpos = 0.47;
+    //позиция для захвата проб с пола
     public static double rotrotScoringingpos = 0.42;
-
+    //указываем максимальную высоту подъемника
     private int maxheight = 1200;
     public  double normalOperationValue = 0.2, currentOperationValue = 0.2;
     private double highLoadOperationValue = 1;
     private double grabPressTime, liftPressTime, amplifierPressTime, rotTimer, sequenceTimer = 0;
+    //позиция поворота сервопривода для закрытия клешней захвата
     public static double grabServoClosedPos = 0.85;
+    //позиция поворота сервопривода для открытых клешней захвата
     public static double        grabServoOpenedPos = 0.62;
+    //позиция подъемника когда он опущен
     public static double        liftServoClosedPos = 0.66;
+    //позиция подъемника когда он поднят
     public static double        liftServoOpenedPos = 0.18;
+    //переменные для запоминания прошлых позиций
     private int lastLeftPos, lastRightPos = 0;
+    //переменная для указания позиций захвата (изменяется при нажатии клавиш на геймпаде)
     private int currentSequence = -1;
+    //переменная для проверки должна ли изменится позиция захвата
     private boolean isStopped, isSequenceRunning = false;
+    //переменные для проверки открыта ли клешня захвата и опущен ли подъемник
     private boolean isGrabClosed, isLiftClosed = true;
     private ElapsedTime timer = new ElapsedTime();
 
     public void init(HardwareMap hard){
+        //указание сервопривода для закрытия и открытия клешней захвата
         grabServo = hard.get(Servo.class, "grabServo");
+        //указание сервопривода для поднятия подъемника
         liftServo = hard.get(Servo.class, "liftServo");
+        //указание сервопривода для поворота клешней захвата
         rotationServo = hard.get(Servo.class, "rotationServo");
+        //указание сервопривода для поворота сервопривода для поворота клешней захвата
         rotationrotationServo = hard.get(Servo.class, "rotationrotationServo");
-
+        // указания в какую сторону должны вращаться сервоприводы
 
         grabServo.setDirection(Servo.Direction.FORWARD);
         liftServo.setDirection(Servo.Direction.REVERSE);
 
         InitSeq();
 
-
+        //обозначение моторов подъемника
         leftLiftMotor = (DcMotorEx) hard.dcMotor.get("leftLiftMotor");
         rightLiftMotor = (DcMotorEx) hard.dcMotor.get("rightLiftMotor");
+        //указание в какую сторону должен вращаться мотор
         rightLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        //указываем режим движения моторов с помощью энкодеров
         leftLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -65,6 +87,7 @@ public class Lift {
 
 
     }
+    // перемещение захвата в автономе
     public void LiftGoToAUTO(int ticks){
         leftLiftMotor.setTargetPosition(ticks);
         rightLiftMotor.setTargetPosition(ticks);
@@ -81,7 +104,7 @@ public class Lift {
 
         currentOperationValue = 0.6;
     }
-
+    //класс для считывания изменений позиций захвата с геймпада
     public void SequenceSwitch(Gamepad g2){
         if (g2.left_stick_button) {
             sequenceTimer = timer.milliseconds();
@@ -101,6 +124,7 @@ public class Lift {
 
 
     }
+    //класс для перемещения захвата в начальную позицию
     public void InitSeq(){
         if (currentSequence==-1) {
 
@@ -118,6 +142,7 @@ public class Lift {
         }
 
     }
+    //класс для перемещение захвата в позицию подвеса образцов на перекладину
     public void RollOutSeq(){
         if (currentSequence==4) {
 
@@ -132,7 +157,7 @@ public class Lift {
         }
 
     }
-
+    //класс для позиции захвата
     public void AimingSeq(){
         if (currentSequence == 1){
 
@@ -148,6 +173,7 @@ public class Lift {
 
         }
     }
+    //класс для позиций захвата
     public void FishingSeq(){
         if (currentSequence == 2){
 
@@ -164,6 +190,7 @@ public class Lift {
 
         }
     }
+    //класс для позиции захвата
     public void ScoringSeq(){
         if (currentSequence == 3){
 
