@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+package org.firstinspires.ftc.teamcode.applications;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.modules.Lift;
 
 @TeleOp(name = "LiftTest", group = "Test")
 public class LiftTest extends LinearOpMode {
