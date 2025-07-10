@@ -25,12 +25,12 @@ public class LiftTest extends LinearOpMode {
 
             LT.SequenceSwitch(gamepad2);
             LT.StickMover(gamepad2);
-            LT.LiftAction(gamepad2);
+//            LT.LiftAction(gamepad2);
             LT.GrabAction(gamepad2);
             LT.Fishing(gamepad2);
 
-            telemetry.addData("left", LT.leftLiftMotor.getCurrentPosition());
-            telemetry.addData("right", LT.rightLiftMotor.getCurrentPosition());
+//            telemetry.addData("left", LT.leftLiftMotor.getCurrentPosition());
+//            telemetry.addData("right", LT.rightLiftMotor.getCurrentPosition());
             telemetry.addData("grab", LT.grabServo.getPosition());
             telemetry.addData("rot", LT.rotationServo.getPosition());
             telemetry.addData("rotrot", LT.rotationrotationServo.getPosition());

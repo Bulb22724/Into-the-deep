@@ -49,7 +49,7 @@ public class AL extends LinearOpMode {
         waitForStart();
         // единожды исполняемые действия после старта
         if (opModeIsActive()) { // единожды исполняемые действия после старта
-        LT.LiftGoToAUTO(ELEV);
+//        LT.LiftGoToAUTO(ELEV);
 
         LT.rotationrotationServo.setPosition(0.42);
         sleep(500);
@@ -61,7 +61,7 @@ public class AL extends LinearOpMode {
 
         sleep(2500);
 
-        LT.LiftGoToAUTO(DECL);
+//        LT.LiftGoToAUTO(DECL);
 
         sleep(2500);
 
@@ -72,7 +72,7 @@ public class AL extends LinearOpMode {
         MDT.Forward(-500, 500, 0, 1850);
             MDT.Forward(0, 500, 0, 1000);
 
-        LT.LiftGoToAUTO(-5);
+//        LT.LiftGoToAUTO(-5);
 
         sleep(2000);
 

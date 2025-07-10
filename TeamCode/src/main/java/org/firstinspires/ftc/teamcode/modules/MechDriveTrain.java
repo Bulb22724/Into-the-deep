@@ -59,9 +59,18 @@ public class MechDriveTrain {
     }
 
     public void OpMode(Gamepad g1) {
-        double y = -g1.left_stick_y;
-        double x = g1.left_stick_x;
-        double rx = -g1.right_stick_x;
+        double y = 0;
+        double x = 0;
+        double rx = 0
+
+
+
+
+
+
+
+
+                ;
         if (g1.y) {
             imu.resetYaw();
         }

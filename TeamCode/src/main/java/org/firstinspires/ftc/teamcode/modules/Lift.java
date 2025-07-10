@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Config
 public class Lift {
     public Servo grabServo, liftServo, rotationServo, rotationrotationServo;
-    public DcMotorEx leftLiftMotor, rightLiftMotor;
+//    public DcMotorEx leftLiftMotor, rightLiftMotor;
     //максимальная позиция поворота захвата
     public static double rotmaxpos = 0.78;
     //средняя позиция поворота захвата
@@ -37,7 +37,7 @@ public class Lift {
     //позиция поворота сервопривода для открытых клешней захвата
     public static double        grabServoOpenedPos = 0.62;
     //позиция подъемника когда он опущен
-    public static double        liftServoClosedPos = 0.66;
+    public static double        liftServoClosedPos = 0.50;
     //позиция подъемника когда он поднят
     public static double        liftServoOpenedPos = 0.18;
     //переменные для запоминания прошлых позиций
@@ -67,17 +67,17 @@ public class Lift {
         InitSeq();
 
         //обозначение моторов подъемника
-        leftLiftMotor = (DcMotorEx) hard.dcMotor.get("leftLiftMotor");
-        rightLiftMotor = (DcMotorEx) hard.dcMotor.get("rightLiftMotor");
-        //указание в какую сторону должен вращаться мотор
-        rightLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        //указываем режим движения моторов с помощью энкодеров
-        leftLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        leftLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        rightLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        leftLiftMotor = (DcMotorEx) hard.dcMotor.get("leftLiftMotor");
+//        rightLiftMotor = (DcMotorEx) hard.dcMotor.get("rightLiftMotor");
+//        //указание в какую сторону должен вращаться мотор
+//        rightLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//
+//        //указываем режим движения моторов с помощью энкодеров
+//        leftLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        rightLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        leftLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        rightLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
 
 
@@ -85,16 +85,16 @@ public class Lift {
 
     }
     // перемещение захвата в автономе
-    public void LiftGoToAUTO(int ticks){
-        leftLiftMotor.setTargetPosition(ticks);
-        rightLiftMotor.setTargetPosition(ticks);
-
-        leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftLiftMotor.setPower(0.4);
-        rightLiftMotor.setPower(0.4);
-    }
+//    public void LiftGoToAUTO(int ticks){
+//        leftLiftMotor.setTargetPosition(ticks);
+//        rightLiftMotor.setTargetPosition(ticks);
+//
+//        leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//        leftLiftMotor.setPower(0.4);
+//        rightLiftMotor.setPower(0.4);
+//    }
     public void LiftGoToOP(int ticks){
         lastLeftPos = ticks;
         lastRightPos = ticks;
@@ -249,53 +249,53 @@ public class Lift {
 
 
     }
-    public void LiftAction(Gamepad g2){
-            if (g2.y & currentOperationValue!=highLoadOperationValue & timer.milliseconds()-amplifierPressTime>250){
-                currentOperationValue = highLoadOperationValue;
-                amplifierPressTime = timer.milliseconds();
-            }
-            else if (g2.y & currentOperationValue!=normalOperationValue & timer.milliseconds()-amplifierPressTime>250){
-                currentOperationValue = normalOperationValue;
-                amplifierPressTime = timer.milliseconds();
-            }
-
-            if (g2.dpad_up & (leftLiftMotor.getCurrentPosition()<maxheight & rightLiftMotor.getCurrentPosition()<maxheight)) {
-                isStopped = false;
-                leftLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                leftLiftMotor.setVelocity(1000);
-                rightLiftMotor.setVelocity(1000);
-
-                lastLeftPos = leftLiftMotor.getCurrentPosition();
-                lastRightPos = rightLiftMotor.getCurrentPosition();
-            } else if (g2.dpad_down & (leftLiftMotor.getCurrentPosition()>-5 & rightLiftMotor.getCurrentPosition()>-5)) {
-                isStopped = false;
-                leftLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                leftLiftMotor.setVelocity(-1000);
-                rightLiftMotor.setVelocity(-1000);
-
-                lastLeftPos = leftLiftMotor.getCurrentPosition();
-                lastRightPos = rightLiftMotor.getCurrentPosition();
-
-            } else {
-                if (!isStopped) {
-                    leftLiftMotor.setVelocity(5);
-                    rightLiftMotor.setVelocity(5);
-                    isStopped = true;
-                }
-                leftLiftMotor.setTargetPosition(lastLeftPos);
-                rightLiftMotor.setTargetPosition(lastRightPos);
-
-                leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                leftLiftMotor.setPower(currentOperationValue);
-                rightLiftMotor.setPower(currentOperationValue);
-            }
-        }
+//    public void LiftAction(Gamepad g2){
+//            if (g2.y & currentOperationValue!=highLoadOperationValue & timer.milliseconds()-amplifierPressTime>250){
+//                currentOperationValue = highLoadOperationValue;
+//                amplifierPressTime = timer.milliseconds();
+//            }
+//            else if (g2.y & currentOperationValue!=normalOperationValue & timer.milliseconds()-amplifierPressTime>250){
+//                currentOperationValue = normalOperationValue;
+//                amplifierPressTime = timer.milliseconds();
+//            }
+//
+//            if (g2.dpad_up & (leftLiftMotor.getCurrentPosition()<maxheight & rightLiftMotor.getCurrentPosition()<maxheight)) {
+//                isStopped = false;
+//                leftLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//
+//                leftLiftMotor.setVelocity(1000);
+//                rightLiftMotor.setVelocity(1000);
+//
+//                lastLeftPos = leftLiftMotor.getCurrentPosition();
+//                lastRightPos = rightLiftMotor.getCurrentPosition();
+//            } else if (g2.dpad_down & (leftLiftMotor.getCurrentPosition()>-5 & rightLiftMotor.getCurrentPosition()>-5)) {
+//                isStopped = false;
+//                leftLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//
+//                leftLiftMotor.setVelocity(-1000);
+//                rightLiftMotor.setVelocity(-1000);
+//
+//                lastLeftPos = leftLiftMotor.getCurrentPosition();
+//                lastRightPos = rightLiftMotor.getCurrentPosition();
+//
+//            } else {
+//                if (!isStopped) {
+//                    leftLiftMotor.setVelocity(5);
+//                    rightLiftMotor.setVelocity(5);
+//                    isStopped = true;
+//                }
+//                leftLiftMotor.setTargetPosition(lastLeftPos);
+//                rightLiftMotor.setTargetPosition(lastRightPos);
+//
+//                leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//                leftLiftMotor.setPower(currentOperationValue);
+//                rightLiftMotor.setPower(currentOperationValue);
+//            }
+//        }
 
     }
 

@@ -8,8 +8,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.MechDriveTrain;
 
-@TeleOp(name = "TeleMain", group = "Active")
-public class TeleMain extends LinearOpMode {
+@TeleOp(name = "TeleSave", group = "Active")
+public class TeleSave extends LinearOpMode {
     private ElapsedTime timer = new ElapsedTime();
     private boolean flag = false;
     private double CT = 0;
@@ -34,10 +34,10 @@ public class TeleMain extends LinearOpMode {
                 LT.ScoringSeq();
 
                 LT.Fishing(gamepad1);
-                LT.SequenceSwitch(gamepad2);
-                LT.StickMover(gamepad2);
-                LT.GrabAction(gamepad2);
-//                LT.LiftAction(gamepad2);
+                LT.SequenceSwitch(gamepad1);
+                LT.StickMover(gamepad1);
+                LT.GrabAction(gamepad1);
+
                 MDT.OpMode(gamepad1);
 
 
