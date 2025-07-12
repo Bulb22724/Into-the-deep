@@ -35,9 +35,9 @@ public class Lift {
     //позиция поворота сервопривода для закрытия клешней захвата
     public static double grabServoClosedPos = 0.85;
     //позиция поворота сервопривода для открытых клешней захвата
-    public static double        grabServoOpenedPos = 0.62;
+    public static double        grabServoOpenedPos = 0.50;
     //позиция подъемника когда он опущен
-    public static double        liftServoClosedPos = 0.50;
+    public static double        liftServoClosedPos = 0.57;
     //позиция подъемника когда он поднят
     public static double        liftServoOpenedPos = 0.18;
     //переменные для запоминания прошлых позиций

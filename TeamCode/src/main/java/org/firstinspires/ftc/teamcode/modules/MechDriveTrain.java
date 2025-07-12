@@ -98,7 +98,6 @@ public class MechDriveTrain {
         frontRightMotor.setPower(frontRightPower * 0.65);
         backRightMotor.setPower(backRightPower * 0.65);
     }
-
     public void Forward(double speedX, double speedY, double speedRot, double time) {
         CT = timer.milliseconds();
 

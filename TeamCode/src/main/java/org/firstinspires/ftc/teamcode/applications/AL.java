@@ -54,7 +54,7 @@ public class AL extends LinearOpMode {
         LT.rotationrotationServo.setPosition(0.42);
         sleep(500);
         LT.rotationServo.setPosition(0.42);
-        MDT.Forward(500, 0, 0, FD1);
+//        MDT.Forward(500, 0, 0, FD1);
 
 
         CT = timer.milliseconds();
@@ -69,8 +69,8 @@ public class AL extends LinearOpMode {
 
         sleep(2500);
 
-        MDT.Forward(-500, 500, 0, 1850);
-            MDT.Forward(0, 500, 0, 1000);
+//        MDT.Forward(-500, 500, 0, 1850);
+//            MDT.Forward(0, 500, 0, 1000);
 
 //        LT.LiftGoToAUTO(-5);
 
